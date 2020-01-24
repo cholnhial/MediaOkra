@@ -1,13 +1,29 @@
 {
   "actions": [
     {
-      "name": "PAUSE",
+      "description": "Default Welcome Intent",
+      "name": "MAIN",
+      "fulfillment": {
+        "conversationName": "conversation_1"
+      },
       "intent": {
-        "name": "com.mediaokra.cholnhial.PAUSE",
-        "parameters": [{
-          "name": "device",
-          "type": "org.schema.type.Text"
-        }],
+        "name": "actions.intent.MAIN"
+      }
+    },
+    {
+      "description": "Direct access",
+      "name": "PAUSE",
+      "fulfillment": {
+        "conversationName": "MediaOkra"
+      },
+      "intent": {
+        "name": "com.cholnhial.MediaOkra.PAUSE",
+        "parameters": [
+          {
+            "name": "device",
+            "type": "org.schema.type.Text"
+          }
+        ],
         "trigger": {
           "queryPatterns": [
             "pause media on my $org.schema.type.Text:device",
@@ -20,8 +36,13 @@
   ],
   "conversations": {
     "conversation_1": {
-      "name": "mediaokra",
-      "url": "YOUR_ENDPOINT_URL",
+      "name": "conversation_1",
+      "url": "https://mediaokra.appspot.com",
+      "fulfillmentApiVersion": 2
+    },
+    "MediaOkra": {
+      "name": "MediaOkra",
+      "url": "https://mediaokra.appspot.com",
       "fulfillmentApiVersion": 2
     }
   }

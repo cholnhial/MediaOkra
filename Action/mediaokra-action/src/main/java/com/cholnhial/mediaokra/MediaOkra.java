@@ -39,7 +39,7 @@ public class MediaOkra extends ActionsSdkApp {
   // safety as the entry point (ActionServlet) instances may
   // be reused by the server.
 
- /* @ForIntent("actions.intent.MAIN")
+  @ForIntent("actions.intent.MAIN")
   public ActionResponse welcome(ActionRequest request) {
     LOGGER.info("Welcome intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
@@ -49,15 +49,17 @@ public class MediaOkra extends ActionsSdkApp {
 
     LOGGER.info("Welcome intent end.");
     return responseBuilder.build();
-  }*/
+  }
 
-  @ForIntent("com.mediaokra.cholnhial.PAUSE")
+  @ForIntent("com.cholnhial.MediaOkra.PAUSE")
   public ActionResponse number(ActionRequest request) {
     LOGGER.info("Number intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
     ResourceBundle rb = ResourceBundle.getBundle("resources");
 
+
     String deviceName = request.getArgument("device").getTextValue();
+    System.out.println("Device Name" + deviceName);
     String response;
 
     response = MessageFormat.format(rb.getString("sayDevice"), deviceName);
