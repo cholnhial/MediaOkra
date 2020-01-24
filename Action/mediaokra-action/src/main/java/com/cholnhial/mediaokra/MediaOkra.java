@@ -69,7 +69,7 @@ public class MediaOkra extends ActionsSdkApp {
     return responseBuilder.build();
   }
 
-  @ForIntent("com.cholnhial.MediaOkra.PAUSE")
+  @ForIntent("com.cholnhial.mediaokra.PAUSE")
   public ActionResponse number(ActionRequest request) {
     LOGGER.info("Number intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
@@ -77,11 +77,11 @@ public class MediaOkra extends ActionsSdkApp {
 
     LOGGER.info(request.getConversationData().toString());
 
-    String deviceName = request.getArgument("device").getTextValue();
-    System.out.println("Device Name" + deviceName);
+   // String deviceName = request.getArgument("device").getTextValue();
+    //System.out.println("Device Name" + deviceName);
     String response;
 
-    response = MessageFormat.format(rb.getString("sayDevice"), deviceName);
+    response = MessageFormat.format(rb.getString("sayDevice"), "computer");
     responseBuilder.add(response);
     LOGGER.info("Number intent end.");
     return responseBuilder.build();
