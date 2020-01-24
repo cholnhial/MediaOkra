@@ -51,12 +51,13 @@ public class MediaOkra extends ActionsSdkApp {
     return responseBuilder.build();
   }
 
-  @ForIntent("com.cholnhial.MediaOkra.PAUSE")
+  @ForIntent("actions.intent.TEXT")
   public ActionResponse number(ActionRequest request) {
     LOGGER.info("Number intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
     ResourceBundle rb = ResourceBundle.getBundle("resources");
 
+    LOGGER.info(request.getConversationData().toString());
 
     String deviceName = request.getArgument("device").getTextValue();
     System.out.println("Device Name" + deviceName);
