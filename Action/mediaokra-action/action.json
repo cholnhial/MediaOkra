@@ -1,21 +1,49 @@
 {
   "actions": [
     {
-      "description": "Default Welcome Intent",
+      "description": "Default welcome intent",
       "name": "MAIN",
       "fulfillment": {
-        "conversationName": "conversation_1"
+        "conversationName": "mediaokra"
       },
       "intent": {
-        "name": "actions.intent.MAIN"
+        "name": "actions.intent.MAIN",
+        "trigger": {
+          "queryPatterns": [
+            "talk to Media Okra"
+          ]
+        }
+      }
+    },
+    {
+      "description": "Direct access",
+      "name": "PAUSE",
+      "fulfillment": {
+        "conversationName": "mediaokra"
+      },
+      "intent": {
+        "name": "com.cholnhial.mediaokra.PAUSE",
+        "parameters": [
+          {
+            "name": "device",
+            "type": "org.schema.type.Text"
+          }
+        ],
+        "trigger": {
+          "queryPatterns": [
+            "pause my $org.schema.type.Text:device",
+            "pause my laptop",
+            "pause my desktop"
+          ]
+        }
       }
     }
   ],
   "conversations": {
-    "conversation_1": {
-      "name": "conversation_1",
-      "url": "https://mediaokra.appspot.com",
-      "fulfillmentApiVersion": 2
+    "ExampleAction": {
+      "name": "mediaokra",
+      "url": "https://mediaokra.appspot.com"
     }
-  }
+  },
+  "locale": "en"
 }
