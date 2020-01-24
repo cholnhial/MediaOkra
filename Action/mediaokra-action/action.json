@@ -1,19 +1,26 @@
 {
   "actions": [
     {
-      "description": "Default Welcome Intent",
-      "name": "MAIN",
-      "fulfillment": {
-        "conversationName": "conversation_1"
-      },
+      "name": "PAUSE",
       "intent": {
-        "name": "actions.intent.MAIN"
+        "name": "com.mediaokra.cholnhial.PAUSE",
+        "parameters": [{
+          "name": "device",
+          "type": "org.schema.type.Text"
+        }],
+        "trigger": {
+          "queryPatterns": [
+            "pause media on my $org.schema.type.Text:device",
+            "pause media on my laptop",
+            "pause media on my desktop"
+          ]
+        }
       }
     }
   ],
   "conversations": {
     "conversation_1": {
-      "name": "conversation_1",
+      "name": "mediaokra",
       "url": "YOUR_ENDPOINT_URL",
       "fulfillmentApiVersion": 2
     }

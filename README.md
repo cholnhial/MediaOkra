@@ -27,6 +27,9 @@ Do this first. You will need the Google Cloud stuff.
 
 ### Configuring the Actions project
 
+For reasons I don't know run this command first in the Project root: ```gcloud app create```.
+I think it will make your App cloud ready or something.
+
  Go to your [Google Cloud Projects](https://console.cloud.google.com/cloud-resource-manager).
 
 There you look for the button **CREATE PROJECT**.
