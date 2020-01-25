@@ -100,9 +100,9 @@ public class MediaOkra extends ActionsSdkApp {
     LOGGER.info(request.getConversationData().toString());
 
     GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
-   String device = Optional.of(request.getArgument("text").getTextValue()).orElse("laptop");
+   //String device = Optional.of(request.getArgument("text").getTextValue()).orElse("laptop");
 
-    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + device);
+    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + "laptop");
     LOGGER.info("Number intent end.");
     return responseBuilder.build();
   }
