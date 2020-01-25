@@ -35,6 +35,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.actions_fulfillment.v2.model.Argument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,9 +101,9 @@ public class MediaOkra extends ActionsSdkApp {
     LOGGER.info(request.getConversationData().toString());
 
     GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
-   //String device = Optional.of(request.getArgument("text").getTextValue()).orElse("laptop");
+    Argument arg = request.getArgument("text");
 
-    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + "laptop");
+    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + arg != null ? arg.getTextValue() : "kitten );
     LOGGER.info("Number intent end.");
     return responseBuilder.build();
   }
