@@ -21,23 +21,29 @@ import com.google.actions.api.ActionResponse;
 import com.google.actions.api.ActionsSdkApp;
 import com.google.actions.api.ForIntent;
 import com.google.actions.api.response.ResponseBuilder;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.ResourceBundle;
+
+import com.google.actions.api.response.helperintent.SignIn;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // Libraries for Google Assistant SDK
 
 public class MediaOkra extends ActionsSdkApp {
-
+  private static final String  MEDIA_OKRA_CLIENT_ID = "763985932186-54djndf4nmv2bnic5lj7ks6e7pl229gt.apps.googleusercontent.com";
   private static final Logger LOGGER = LoggerFactory
       .getLogger(MediaOkra.class);
 
-  // Note: Do not store any state as an instance variable.
-  // It is ok to have final variables where the variable is assigned a value in
-  // the constructor but remains unchanged. This is required to ensure thread-
-  // safety as the entry point (ActionServlet) instances may
-  // be reused by the server.
 
   @ForIntent("actions.intent.MAIN")
   public ActionResponse welcome(ActionRequest request) {
@@ -52,40 +58,90 @@ public class MediaOkra extends ActionsSdkApp {
   }
 
   @ForIntent("actions.intent.TEXT")
-  public ActionResponse sayDevice(ActionRequest request) {
+  public ActionResponse command(ActionRequest request) {
     LOGGER.info("Number intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
-    ResourceBundle rb = ResourceBundle.getBundle("resources");
+    ResourceBundle rb = ResourceBundle.getBundle("resources",
+            request.getLocale());
 
     LOGGER.info(request.getConversationData().toString());
 
-    String deviceName = request.getArgument("text").getTextValue();
-    System.out.println("Device Name" + deviceName);
-    String response;
 
-    response = MessageFormat.format(rb.getString("sayDevice"), deviceName);
-    responseBuilder.add(response);
+    String said = request.getArgument("text").getTextValue();
+
+    if (said.equalsIgnoreCase("sign in")) {
+      responseBuilder.add(new SignIn().setContext("To get your account details")).build();
+    }
+    else if(said.equalsIgnoreCase("generate code")) {
+      responseBuilder.add("A new code has been generated for you, say send code to send the code to your email");
+    }
+    else if(said.equalsIgnoreCase("send code")) {
+      responseBuilder.add("Your code has been sent to your mail");
+    }
+    else {
+      if(request.getUser() == null) {
+        responseBuilder.add("I am unable to do anything without signing in. You can say \"sign-in\" to get an account");
+      } else {
+        responseBuilder.add("You said: " + said);
+      }
+    }
+
     LOGGER.info("Number intent end.");
     return responseBuilder.build();
   }
 
   @ForIntent("com.cholnhial.mediaokra.PAUSE")
-  public ActionResponse number(ActionRequest request) {
+  public ActionResponse pause(ActionRequest request) {
     LOGGER.info("Number intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
     ResourceBundle rb = ResourceBundle.getBundle("resources");
 
     LOGGER.info(request.getConversationData().toString());
 
-   // String deviceName = request.getArgument("device").getTextValue();
-    //System.out.println("Device Name" + deviceName);
-    String response;
+    GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
+   // String device = request.getArgument("device").getTextValue();
 
-    response = MessageFormat.format(rb.getString("sayDevice"), "computer");
-    responseBuilder.add(response);
+    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + "laptop");
     LOGGER.info("Number intent end.");
     return responseBuilder.build();
   }
 
+  @ForIntent("actions.intent.SIGN_IN")
+  public ActionResponse getSignInStatus(ActionRequest request) {
+    ResponseBuilder responseBuilder = getResponseBuilder(request);
+    if (request.isSignInGranted()) {
+      GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
+      responseBuilder.add(
+              "I got your account details, "
+                      + profile.get("given_name")
+                      + ". What do you want to do next?");
+    } else {
+      responseBuilder.add("I won't be able to save your data, but what do you want to do next?");
+    }
+    return responseBuilder.build();
+  }
+  private GoogleIdToken.Payload getUserProfile(String idToken) {
+    GoogleIdToken.Payload profile = null;
+    try {
+      profile = decodeIdToken(idToken);
+    } catch (Exception e) {
+      LOGGER.error("error decoding idtoken");
+      LOGGER.error(e.toString());
+    }
+    return profile;
+  }
+
+  private GoogleIdToken.Payload decodeIdToken(String idTokenString)
+          throws GeneralSecurityException, IOException {
+    HttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
+    JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+    GoogleIdTokenVerifier verifier =
+            new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                    // Specify the CLIENT_ID of the app that accesses the backend:
+                    .setAudience(Collections.singletonList(MEDIA_OKRA_CLIENT_ID))
+                    .build();
+    GoogleIdToken idToken = verifier.verify(idTokenString);
+    return idToken.getPayload();
+  }
 
 }
