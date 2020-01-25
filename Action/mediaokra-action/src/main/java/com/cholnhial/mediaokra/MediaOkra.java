@@ -103,7 +103,7 @@ public class MediaOkra extends ActionsSdkApp {
     GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
     Argument arg = request.getArgument("text");
 
-    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + arg != null ? arg.getTextValue() : "kitten );
+    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + arg != null ? arg.getTextValue() : "kitten");
     LOGGER.info("Number intent end.");
     return responseBuilder.build();
   }
