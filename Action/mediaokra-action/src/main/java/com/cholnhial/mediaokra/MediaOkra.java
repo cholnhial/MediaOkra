@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.google.actions.api.response.helperintent.SignIn;
@@ -99,9 +100,9 @@ public class MediaOkra extends ActionsSdkApp {
     LOGGER.info(request.getConversationData().toString());
 
     GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
-   // String device = request.getArgument("device").getTextValue();
+   String device = Optional.of(request.getArgument("text").getTextValue()).orElse("laptop");
 
-    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + "laptop");
+    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + device);
     LOGGER.info("Number intent end.");
     return responseBuilder.build();
   }

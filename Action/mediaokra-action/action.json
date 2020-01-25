@@ -25,13 +25,13 @@
         "name": "com.cholnhial.mediaokra.PAUSE",
         "parameters": [
           {
-            "name": "device",
+            "name": "text",
             "type": "org.schema.type.Text"
           }
         ],
         "trigger": {
           "queryPatterns": [
-            "pause my $org.schema.type.Text:device",
+            "pause my $org.schema.type.Text:text",
             "pause my laptop",
             "pause my desktop"
           ]
@@ -42,7 +42,8 @@
   "conversations": {
     "mediaokra": {
       "name": "mediaokra",
-      "url": "https://mediaokra.appspot.com"
+      "url": "https://mediaokra.appspot.com",
+      "fulfillmentApiVersion": 2
     }
   }
 }
