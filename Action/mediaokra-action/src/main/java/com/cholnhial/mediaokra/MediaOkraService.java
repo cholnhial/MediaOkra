@@ -1,18 +1,23 @@
 package com.cholnhial.mediaokra;
 
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
 import com.google.cloud.ServiceOptions;
 import com.google.cloud.datastore.*;
+import com.google.cloud.pubsub.v1.Publisher;
 import com.google.cloud.pubsub.v1.SubscriptionAdminClient;
 import com.google.cloud.pubsub.v1.TopicAdminClient;
-import com.google.pubsub.v1.ProjectSubscriptionName;
-import com.google.pubsub.v1.ProjectTopicName;
-import com.google.pubsub.v1.PushConfig;
-import com.google.pubsub.v1.Subscription;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.DescriptorProtos;
+import com.google.pubsub.v1.*;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MediaOkraService {
 
@@ -36,7 +41,9 @@ public class MediaOkraService {
         Entity userCodeEntity = getUserCodeEntity();
         if(userCodeEntity != null) {
             String oldCode = userCodeEntity.getString("code");
-            Entity updatedCodeEntity = Entity.newBuilder(userCodeEntity.getKey()).set("code", newCode).build();
+            Entity updatedCodeEntity = Entity.newBuilder(userCodeEntity.getKey())
+                    .set("code", newCode)
+                    .set("email", userEmail).build();
             datastore.update(updatedCodeEntity);
             createPubSubTopicAndSubscription(newCode, oldCode);
         } else {
@@ -116,6 +123,28 @@ public class MediaOkraService {
             Subscription subscription =
                     subscriptionAdminClient.createSubscription(
                             subscriptionName, topicNameToSubscribeTo, PushConfig.getDefaultInstance(), 0);
+        }
+    }
+
+    public void publishMediaCommand(String command, String userCode) throws ExecutionException, InterruptedException, IOException {
+        String topicId = MEDIAOKRA_TOPIC_PREFIX + userCode;
+        ProjectTopicName topicName = ProjectTopicName.of(PROJECT_ID, topicId);
+        Publisher publisher = null;
+        List<ApiFuture<String>> futures = new ArrayList<>();
+        try {
+            publisher = Publisher.newBuilder(topicName).build();
+            ByteString data = ByteString.copyFromUtf8(command);
+            PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
+                    .setData(data)
+                    .build();
+            ApiFuture<String> future = publisher.publish(pubsubMessage);
+            futures.add(future);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (publisher != null) {
+                publisher.shutdown();
+            }
         }
     }
 

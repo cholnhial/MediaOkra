@@ -10,30 +10,31 @@
         "name": "actions.intent.MAIN",
         "trigger": {
           "queryPatterns": [
-            "talk to Media Okra"
+            "tell Media Okra"
           ]
         }
       }
     },
     {
-      "description": "Direct access",
-      "name": "PAUSE",
+      "description": "Direct Media Command",
+      "name": "MEDIA_COMMAND",
       "fulfillment": {
         "conversationName": "mediaokra"
       },
       "intent": {
-        "name": "com.cholnhial.mediaokra.PAUSE",
+        "name": "com.cholnhial.mediaokra.MEDIA_COMMAND",
         "parameters": [
           {
-            "name": "text",
+            "name": "device",
             "type": "org.schema.type.Text"
           }
         ],
         "trigger": {
           "queryPatterns": [
-            "pause my $org.schema.type.Text:text",
-            "pause my laptop",
-            "pause my desktop"
+            "to $org.schema.type.Text:device",
+            "to pause",
+            "to stop",
+            "to play"
           ]
         }
       }
