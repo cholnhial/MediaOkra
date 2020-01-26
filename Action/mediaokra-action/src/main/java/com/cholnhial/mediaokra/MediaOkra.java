@@ -66,7 +66,7 @@ public class MediaOkra extends ActionsSdkApp {
 
         String said = request.getArgument("text").getTextValue();
 
-        if (request.getUser() == null) {
+        if (request.getUser().getIdToken() == null) {
             responseBuilder.add("I am unable to do anything without signing in. You can say \"sign-in\" to get an account");
         } else {
             GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
@@ -120,7 +120,7 @@ public class MediaOkra extends ActionsSdkApp {
 
         LOGGER.info(request.getConversationData().toString());
 
-        if(request.getUser() != null) {
+        if(request.getUser().getIdToken() != null) {
             GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
             MediaOkraService mediaOkraService = new MediaOkraService(profile.getEmail());
             Argument arg = request.getArgument("device");
