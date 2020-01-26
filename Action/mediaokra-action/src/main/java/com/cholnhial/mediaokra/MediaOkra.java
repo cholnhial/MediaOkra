@@ -81,9 +81,16 @@ public class MediaOkra extends ActionsSdkApp {
       try {
 
         MediaOkraService mediaOkraService = new MediaOkraService(profile.getEmail());
-        String code = mediaOkraService.generateNewCode();
 
-        responseBuilder.add("Your new Media Okra code is: " + code);
+        new Thread(() -> {
+          try {
+            mediaOkraService.generateNewCode();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }).start();
+
+                responseBuilder.add("Your code is being generared, check back in a few minutes.");
       } catch (Exception e) {
         responseBuilder.add("sorry I can't generate your code, try again later: " + e.getMessage());
       }

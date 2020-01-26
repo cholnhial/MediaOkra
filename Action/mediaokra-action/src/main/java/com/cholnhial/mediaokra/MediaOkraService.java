@@ -35,7 +35,7 @@ public class MediaOkraService {
 
         Entity userCodeEntity = getUserCodeEntity();
         if(userCodeEntity != null) {
-            String oldCode = userCodeEntity.getString("code") + "";
+            String oldCode = userCodeEntity.getString("code");
             Entity updatedCodeEntity = Entity.newBuilder(userCodeEntity.getKey()).set("code", newCode).build();
             datastore.update(updatedCodeEntity);
             createPubSubTopicAndSubscription(newCode, oldCode);
@@ -70,12 +70,12 @@ public class MediaOkraService {
                         StructuredQuery.PropertyFilter.eq("email", userEmail)))
                 .build();
         QueryResults<Entity> userCodes = datastore.run(query);
-        Entity lastEntity = null;
-        while(userCodes.hasNext()) {
-            lastEntity = userCodes.next();
+
+        if(userCodes.hasNext()) {
+            return userCodes.next();
         }
 
-        return lastEntity;
+        return null;
     }
 
     private static void createPubSubTopicAndSubscription(String newCode, String previousCode) throws IOException {
@@ -92,7 +92,7 @@ public class MediaOkraService {
 
             try (SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient.create()) {
                 ProjectSubscriptionName subscriptionName =
-                        ProjectSubscriptionName.of(PROJECT_ID, MEDIAOKRA_SUBSCRIPTION_PREFIX + newCode);
+                        ProjectSubscriptionName.of(PROJECT_ID, MEDIAOKRA_SUBSCRIPTION_PREFIX + previousCode);
                 subscriptionAdminClient.deleteSubscription(subscriptionName);
             }
         }
