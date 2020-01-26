@@ -24,9 +24,7 @@ import com.google.actions.api.response.ResponseBuilder;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.google.actions.api.response.helperintent.SignIn;
@@ -36,6 +34,9 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.actions_fulfillment.v2.model.Argument;
+import com.google.cloud.Timestamp;
+import com.google.cloud.datastore.*;
+import com.google.firebase.auth.FirebaseAuthException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,8 @@ import org.slf4j.LoggerFactory;
 
 public class MediaOkra extends ActionsSdkApp {
   private static final String  MEDIA_OKRA_CLIENT_ID = "763985932186-54djndf4nmv2bnic5lj7ks6e7pl229gt.apps.googleusercontent.com";
+  private static final String DATABASE_URL = "https://mediaokra.firebaseio.com";
+
   private static final Logger LOGGER = LoggerFactory
       .getLogger(MediaOkra.class);
 
@@ -61,7 +64,6 @@ public class MediaOkra extends ActionsSdkApp {
 
   @ForIntent("actions.intent.TEXT")
   public ActionResponse command(ActionRequest request) {
-    LOGGER.info("Number intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
     ResourceBundle rb = ResourceBundle.getBundle("resources",
             request.getLocale());
@@ -75,10 +77,23 @@ public class MediaOkra extends ActionsSdkApp {
       responseBuilder.add(new SignIn().setContext("To get your account details")).build();
     }
     else if(said.equalsIgnoreCase("generate code")) {
-      responseBuilder.add("A new code has been generated for you, say send code to send the code to your email");
+      GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
+      try {
+
+        MediaOkraService mediaOkraService = new MediaOkraService(profile.getEmail());
+        String code = mediaOkraService.generateNewCode();
+
+        responseBuilder.add("Your new Media Okra code is: " + code);
+      } catch (Exception e) {
+        responseBuilder.add("sorry I can't generate your code, try again later: " + e.getMessage());
+      }
+
     }
-    else if(said.equalsIgnoreCase("send code")) {
-      responseBuilder.add("Your code has been sent to your mail");
+    else if(said.equalsIgnoreCase("my code")) {
+      GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
+      MediaOkraService mediaOkraService = new MediaOkraService(profile.getEmail());
+      String myCode = mediaOkraService.getUserCode();
+      responseBuilder.add("Your Media Okra code is: " + myCode);
     }
     else {
       if(request.getUser() == null) {
@@ -88,23 +103,21 @@ public class MediaOkra extends ActionsSdkApp {
       }
     }
 
-    LOGGER.info("Number intent end.");
     return responseBuilder.build();
   }
 
   @ForIntent("com.cholnhial.mediaokra.PAUSE")
   public ActionResponse pause(ActionRequest request) {
-    LOGGER.info("Number intent start.");
     ResponseBuilder responseBuilder = getResponseBuilder(request);
     ResourceBundle rb = ResourceBundle.getBundle("resources");
 
     LOGGER.info(request.getConversationData().toString());
 
     GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
-    Argument arg = request.getArgument("text");
+    Argument arg = request.getArgument("device");
 
-    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to turn off " + arg != null ? arg.getTextValue() : "kitten");
-    LOGGER.info("Number intent end.");
+    responseBuilder.add("Hello, " + profile.get("given_name") + ". You want to pause your " + arg.getTextValue());
+
     return responseBuilder.build();
   }
 
