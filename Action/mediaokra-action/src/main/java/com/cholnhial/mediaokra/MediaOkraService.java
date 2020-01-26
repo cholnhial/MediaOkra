@@ -18,7 +18,7 @@ public class MediaOkraService {
 
     private static final String PROJECT_ID = ServiceOptions.getDefaultProjectId();
     private static final String MEDIAOKRA_TOPIC_PREFIX = "MEDIAOKRA-TOPIC-";
-    private static final String MEDIAOKRA_SUBCRIPTION_PREFIX = "MEDIAOKRA-SUB-";
+    private static final String MEDIAOKRA_SUBSCRIPTION_PREFIX = "MEDIAOKRA-SUB-";
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(MediaOkraService.class);
@@ -92,7 +92,7 @@ public class MediaOkraService {
 
             try (SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient.create()) {
                 ProjectSubscriptionName subscriptionName =
-                        ProjectSubscriptionName.of(PROJECT_ID, MEDIAOKRA_SUBCRIPTION_PREFIX + newCode);
+                        ProjectSubscriptionName.of(PROJECT_ID, MEDIAOKRA_SUBSCRIPTION_PREFIX + newCode);
                 subscriptionAdminClient.deleteSubscription(subscriptionName);
             }
         }
@@ -100,9 +100,8 @@ public class MediaOkraService {
         /***
          *  CREATE NEW TOPIC
          */
-        String newTopic;
+        String newTopic = MEDIAOKRA_TOPIC_PREFIX + newCode;
         try (TopicAdminClient topicAdminClient = TopicAdminClient.create()) {
-             newTopic = MEDIAOKRA_TOPIC_PREFIX + newCode;
             ProjectTopicName topicName = ProjectTopicName.of(PROJECT_ID, newTopic);
             topicAdminClient.createTopic(topicName);
         }
@@ -113,7 +112,7 @@ public class MediaOkraService {
         try (SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient.create()) {
             ProjectTopicName topicNameToSubscribeTo = ProjectTopicName.of(PROJECT_ID, newTopic);
             ProjectSubscriptionName subscriptionName =
-                    ProjectSubscriptionName.of(PROJECT_ID, MEDIAOKRA_SUBCRIPTION_PREFIX + newCode);
+                    ProjectSubscriptionName.of(PROJECT_ID, MEDIAOKRA_SUBSCRIPTION_PREFIX + newCode);
             Subscription subscription =
                     subscriptionAdminClient.createSubscription(
                             subscriptionName, topicNameToSubscribeTo, PushConfig.getDefaultInstance(), 0);
