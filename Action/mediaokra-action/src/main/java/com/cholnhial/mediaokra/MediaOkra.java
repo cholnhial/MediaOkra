@@ -67,14 +67,12 @@ public class MediaOkra extends ActionsSdkApp {
         String said = request.getArgument("text").getTextValue();
 
         if (request.getUser().getIdToken() == null) {
-            responseBuilder.add("I am unable to do anything without signing in. You can say \"sign-in\" to get an account");
+            responseBuilder.add("I am unable to do anything without signing in. You can say \"sign in\" to get an account");
         } else {
             GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
             MediaOkraService mediaOkraService = new MediaOkraService(profile.getEmail());
 
-            if (said.equalsIgnoreCase("sign in")) {
-                responseBuilder.add(new SignIn().setContext("To get your account details")).build();
-            } else if (said.equalsIgnoreCase("generate code")) {
+             if (said.equalsIgnoreCase("generate code")) {
                 try {
 
                     generateUserCodeInBackground(mediaOkraService);
@@ -97,6 +95,10 @@ public class MediaOkra extends ActionsSdkApp {
                     responseBuilder.add("There was an issue sending the command to your device, please try again later.");
                 }
             }
+        }
+
+        if (said.equalsIgnoreCase("sign in")) {
+            responseBuilder.add(new SignIn().setContext("To get your account details")).build();
         }
 
 

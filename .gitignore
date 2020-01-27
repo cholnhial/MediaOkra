@@ -1,1 +1,5 @@
 Action/mediaokra-action/build
+Action/mediaokra-action/out
+Action/mediaokra-action/.gradle
+Action/mediaokra-action/.idea
+

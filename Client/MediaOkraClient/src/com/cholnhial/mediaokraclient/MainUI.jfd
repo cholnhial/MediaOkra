@@ -1,0 +1,48 @@
+JFDML JFormDesigner: "7.0.0.6.255" Java: "1.8.0_202-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "fill,hidemode 3"
+			"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill]"
+			"$rowConstraints": "[][][][][][][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "MediaOkra Code"
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 9, false )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 1"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "mediaOkraCodeTxtFld"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 3 7 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "startStopBtn"
+				"text": "Start Listening"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 5"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				"horizontalScrollBarPolicy": 32
+				"verticalScrollBarPolicy": 22
+				"background": new java.awt.Color( 214, 217, 223, 255 )
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "logTextPane"
+					"foreground": sfield java.awt.Color green
+					"background": new java.awt.Color( 0, 0, 0, 255 )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 11 1,hmin 200"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 470, 390 )
+		} )
+	}
+}
