@@ -5,15 +5,88 @@
 package com.cholnhial.mediaokraclient;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.*;
+
+import com.google.cloud.ServiceOptions;
+import com.google.cloud.pubsub.v1.AckReplyConsumer;
+import com.google.cloud.pubsub.v1.MessageReceiver;
+import com.google.cloud.pubsub.v1.Subscriber;
+import com.google.pubsub.v1.ProjectSubscriptionName;
+import com.google.pubsub.v1.PubsubMessage;
 import net.miginfocom.swing.*;
 
 /**
  * @author unknown
  */
 public class MainUI extends JFrame {
+
+    private boolean isListening;
+    private Subscriber subscriber = null;
+
     public MainUI() {
+        this.isListening = false;
         initComponents();
+    }
+
+    private static final String PROJECT_ID = ServiceOptions.getDefaultProjectId();
+
+    class MessageReceiverExample implements MessageReceiver {
+
+        @Override
+        public void receiveMessage(PubsubMessage message, AckReplyConsumer consumer) {
+            System.out.println(
+                    "Message Id: " + message.getMessageId() + " Data: " + message.getData().toStringUtf8());
+            // Ack only after all work for the message is complete.
+            MainUI.this.printLog(message.getData().toStringUtf8());
+            consumer.ack();
+        }
+    }
+
+
+    public void printLog(String msg) {
+        this.logTextPane.setText(this.logTextPane.getText() + "\n" + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME) + ": " + msg);
+    }
+
+    private void startStopBtnActionPerformed(ActionEvent e) {
+
+        if(isListening == false) {
+            String code = this.mediaOkraCodeTxtFld.getText();
+            if(code.equals("")) {
+                JOptionPane.showConfirmDialog(rootPane,"Please enter your Media Okra Code",
+                        "Can't start listening", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+
+            } else {
+                this.startStopBtn.setText("Stop listening");
+                isListening = true;
+                this.printLog("Listening using code: " + code);
+
+                String subscriptionId = "MEDIAOKRA-SUB-J8WYXKC";
+                ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(
+                        PROJECT_ID, subscriptionId);
+                try {
+                    new Thread(() -> {
+
+                        // create a subscriber bound to the asynchronous message receiver
+                        subscriber =
+                                Subscriber.newBuilder(subscriptionName, new MessageReceiverExample()).build();
+                        subscriber.startAsync().awaitRunning();
+                        // Allow the subscriber to run indefinitely unless an unrecoverable error occurs.
+                        subscriber.awaitTerminated();
+                    }).start();
+
+                } catch (IllegalStateException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } else {
+            this.startStopBtn.setText("Start listening");
+            this.printLog("Stopped listening");
+            isListening = false;
+        }
+
     }
 
     private void initComponents() {
@@ -58,6 +131,7 @@ public class MainUI extends JFrame {
 
         //---- startStopBtn ----
         startStopBtn.setText("Start Listening");
+        startStopBtn.addActionListener(e -> startStopBtnActionPerformed(e));
         contentPane.add(startStopBtn, "cell 5 5");
 
         //======== scrollPane1 ========
