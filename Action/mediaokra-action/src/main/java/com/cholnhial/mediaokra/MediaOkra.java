@@ -124,7 +124,7 @@ public class MediaOkra extends ActionsSdkApp {
         if(request.getUser().getIdToken() != null) {
             GoogleIdToken.Payload profile = getUserProfile(request.getUser().getIdToken());
             MediaOkraService mediaOkraService = new MediaOkraService(profile.getEmail());
-            Argument arg = request.getArgument("device");
+            Argument arg = request.getArgument("command");
             try {
                 mediaOkraService.publishMediaCommand(arg.getTextValue(), mediaOkraService.getUserCode());
             } catch (Exception e) {

@@ -10,7 +10,7 @@
         "name": "actions.intent.MAIN",
         "trigger": {
           "queryPatterns": [
-            "tell Media Okra"
+            "talk to Media Okra"
           ]
         }
       }
@@ -25,15 +25,14 @@
         "name": "com.cholnhial.mediaokra.MEDIA_COMMAND",
         "parameters": [
           {
-            "name": "device",
+            "name": "command",
             "type": "org.schema.type.Text"
           }
         ],
         "trigger": {
           "queryPatterns": [
-            "to $org.schema.type.Text:device",
+            "to $org.schema.type.Text:command",
             "to pause",
-            "to stop",
             "to play"
           ]
         }
