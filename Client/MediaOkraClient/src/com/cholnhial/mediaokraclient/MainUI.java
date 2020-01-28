@@ -6,6 +6,7 @@ package com.cholnhial.mediaokraclient;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
@@ -33,18 +34,39 @@ public class MainUI extends JFrame {
 
     private static final String PROJECT_ID = ServiceOptions.getDefaultProjectId();
 
-    class MessageReceiverExample implements MessageReceiver {
+    class MediaCommandsMessageReceiver implements MessageReceiver {
 
         @Override
         public void receiveMessage(PubsubMessage message, AckReplyConsumer consumer) {
-            System.out.println(
-                    "Message Id: " + message.getMessageId() + " Data: " + message.getData().toStringUtf8());
-            // Ack only after all work for the message is complete.
-            MainUI.this.printLog(message.getData().toStringUtf8());
+            String mediaCommand = message.getData().toStringUtf8();
+            MainUI.this.printLog("Media command received: " + mediaCommand);
+            switch(mediaCommand) {
+                case "play":
+                    executeMediaKeyScript("play");
+                    break;
+                case "pause":
+                    executeMediaKeyScript("pause");
+                    break;
+                case "mute":
+                    executeMediaKeyScript("mute");
+                    break;
+                    default:
+                        MainUI.this.printLog("Media command received: " + mediaCommand + ", is unknown");
+            }
             consumer.ack();
         }
     }
 
+    private void executeMediaKeyScript(String command)  {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", "/Users/chol/Documents/Projects/MediaOkra/Client/MediaOkraClient/media.py " + command);
+        try {
+            printLog("Executing command: " + command);
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void printLog(String msg) {
         this.logTextPane.setText(this.logTextPane.getText() + "\n" + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME) + ": " + msg);
@@ -52,7 +74,7 @@ public class MainUI extends JFrame {
 
     private void startStopBtnActionPerformed(ActionEvent e) {
 
-        if(isListening == false) {
+        if(!isListening) {
             String code = this.mediaOkraCodeTxtFld.getText();
             if(code.equals("")) {
                 JOptionPane.showConfirmDialog(rootPane,"Please enter your Media Okra Code",
@@ -63,23 +85,17 @@ public class MainUI extends JFrame {
                 isListening = true;
                 this.printLog("Listening using code: " + code);
 
-                String subscriptionId = "MEDIAOKRA-SUB-J8WYXKC";
+                String subscriptionId = "MEDIAOKRA-SUB-" + code;
                 ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(
                         PROJECT_ID, subscriptionId);
-                try {
-                    new Thread(() -> {
 
-                        // create a subscriber bound to the asynchronous message receiver
-                        subscriber =
-                                Subscriber.newBuilder(subscriptionName, new MessageReceiverExample()).build();
-                        subscriber.startAsync().awaitRunning();
-                        // Allow the subscriber to run indefinitely unless an unrecoverable error occurs.
-                        subscriber.awaitTerminated();
-                    }).start();
-
-                } catch (IllegalStateException ex) {
-                    ex.printStackTrace();
-                }
+                // We don't want to block the UI
+                new Thread(() -> {
+                    subscriber =
+                            Subscriber.newBuilder(subscriptionName, new MediaCommandsMessageReceiver()).build();
+                    subscriber.startAsync().awaitRunning();
+                    subscriber.awaitTerminated();
+                }).start();
             }
         } else {
             this.startStopBtn.setText("Start listening");

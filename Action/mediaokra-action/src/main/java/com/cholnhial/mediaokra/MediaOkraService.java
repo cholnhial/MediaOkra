@@ -142,6 +142,7 @@ public class MediaOkraService {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            ApiFutures.allAsList(futures).get(); // publish the message or messages
             if (publisher != null) {
                 publisher.shutdown();
             }

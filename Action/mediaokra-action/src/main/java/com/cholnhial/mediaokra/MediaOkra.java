@@ -118,7 +118,6 @@ public class MediaOkra extends ActionsSdkApp {
     @ForIntent("com.cholnhial.mediaokra.MEDIA_COMMAND")
     public ActionResponse directMediaCommand(ActionRequest request) {
         ResponseBuilder responseBuilder = getResponseBuilder(request);
-        ResourceBundle rb = ResourceBundle.getBundle("resources");
 
         LOGGER.info(request.getConversationData().toString());
 
