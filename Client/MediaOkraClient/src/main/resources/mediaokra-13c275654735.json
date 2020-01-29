@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mediaokra",
+  "private_key_id": "13c27565473523e170bbc05699fd620143b1b780",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqeDs2vBV1rfCM\nMQMiG5R81TvJL0ponMfNMtTdTRgNBsJopqdgxCe4Dfb9E9rq69C1tWp6kMntUc41\nIBOGzRKZ86mDsJlZm4v0UrfrE33tzWkrB5jtAQDavu9Vui0sk8vXYy88Lkr+3B/v\nL2sk8a19dB1WEf4K5LjBdXSLR3rdEZywH7VFYV3NQdY2S0T/1SjjElJ0v56M649O\nEhR4AFHsqJe5c3fTR+8dem/BO7lDHrReVrw6yoHMKUYERDAF9mWEwF26jrt0RVAi\n6AvWy+waygBC5g1wjJvbuu3Z/aVaVJc6mhsHnX8FJKICmIXjEkmtJruQOtdeszby\n+4lzcktdAgMBAAECggEAKJd/lh18SKzWAjPriJQjrAQEe/gIUle+1fRcLqQcbYGm\nClBgu9CJmrCslv/C2by0Uohz5eKTSrD3lrvgGnG7k7ArNcH4ChfZYCDQTagzDMyk\nVcw11H2wK+ZaTEIMXriEyfGCvmRRlFVrP0O90irAQobDM4sOQJ7NBbgHu+CV94zG\nEX6TRngTDD10P/ZJTFhSG3jzVXLdlIEj+6M62RZlwwv4u25moh+SXghC41T8kCq9\nTAYbG+79oZC1qETpjk08jj1JKrPlA48H5l9L/bZLLgxmW8+MoPbMrq53QIXg0Ts2\n80xooFfamwhuWjcp21tTpLtFOylkF8/PSMSx3vDO0QKBgQDTaIHQ4W5qP46UAjd1\nsdEa5rOcUtlWow0CCeQlCwhI9NCd19aqQcdGptUo1Vbgxt+75AOIwxKJOdWgRql4\nI686HCWDVFWZv4vpfJ9yFvWZ/6WBiwIyImQUm/X89juhqk+hi63Wx3pJ0Vbs5IDt\n0EK96SL7mY+nlRz91C+xsuHxuQKBgQDObSXZFka8qLOzoi8BDq82I5/61gRywYbx\npiCGW6ZiXX+Tdik5ZxwsMI4uS/w1E+7kjN8x05k0DaRL3nxp9YpOpVQijfhfF54r\nlCD6UoV05wpnu3Fx1SCWDfAzXnYQdwFOhYEB11JMNiP9Gy4bpS03Krdc8GZyn8gX\nVYFp1PGIxQKBgE81ieYkgMVIWPh1uCfd3vYQWF2K4SnH37jS0etbLdh/+aYaV7Dl\nAnAjVBx/ipSfjvaMIRLd3BUUWUk7EIYWALJqF1gUghogHaD285rApXb0xSM7XTBB\nmHPsV4dXDtKsyDdD6XdeuB/uUn5hwzjXXhpfvp68U4m7oegs103iMyvpAoGAHhCF\nh6WX7dhAO/RuFiBWYnMz1KuhADmxdrZ0XD0y8XaeoxJ9lI+w6bq0qoeElxJtI7pk\ns3QXBx7JhAdGZYROfX/UzieROgBNmBk96Fdmeo0/1bXWIvcghNpI1qJ2XZWHijEl\nhegfY1wrR6zSvVIEUNmW1SFqOl2NHeDlNU2/U+UCgYBq+3a4X3JDuoU7QU+KFXn1\ncsdg+9Pn99SVAssMfztuW0qkUm+Ag51AUmL2g3CHt9rc4Tuaofr7c0Lu3BdNY93j\nMmbLiHt6tE7VdXsCRr/3usrspuzdHmTwyGzVKsP3mpJ2S3Qls/vuXEIM+9xKCzmr\nH5LelxKDY81nMKyMFpuM4g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "mediaokraclient@mediaokra.iam.gserviceaccount.com",
+  "client_id": "100561865685303273143",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mediaokraclient%40mediaokra.iam.gserviceaccount.com"
+}

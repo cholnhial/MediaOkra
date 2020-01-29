@@ -1,0 +1,53 @@
+JFDML JFormDesigner: "7.0.0.6.255" Java: "1.8.0_202-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "fill,hidemode 3"
+			"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill]"
+			"$rowConstraints": "[][][][][][][][]"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq {space ::49:x, par c {comp startStopBtn::c:p:178:p, comp mediaOkraCodeTxtFld::c:p:333:p, comp label1::c:p:188:p}, space ::54:x}}"
+				"$verticalGroup": "par l {seq l {space :::p, comp label1:::p:27:p, space :::p, comp mediaOkraCodeTxtFld:::p:28:p, space :::p, comp startStopBtn:::p:28:p, space ::9:x}}"
+			} ) {
+				name: "panel1"
+				"minimumSize": new java.awt.Dimension( 374, 110 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "MediaOkra Code"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 9, false )
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "mediaOkraCodeTxtFld"
+					"horizontalAlignment": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "startStopBtn"
+					"text": "Start Listening"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "startStopBtnActionPerformed", true ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 12 7"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				"horizontalScrollBarPolicy": 32
+				"verticalScrollBarPolicy": 22
+				"background": new java.awt.Color( 214, 217, 223, 255 )
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "logTextPane"
+					"foreground": sfield java.awt.Color green
+					"background": new java.awt.Color( 0, 0, 0, 255 )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7 12 1,hmin 200"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 470, 390 )
+		} )
+	}
+}
