@@ -10,6 +10,7 @@
         "name": "actions.intent.MAIN",
         "trigger": {
           "queryPatterns": [
+            "tell Media Okra",
             "talk to Media Okra"
           ]
         }
@@ -32,8 +33,7 @@
         "trigger": {
           "queryPatterns": [
             "to $org.schema.type.Text:command",
-            "to pause",
-            "to play"
+            "to stop"
           ]
         }
       }

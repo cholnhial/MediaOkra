@@ -127,6 +127,7 @@ public class MediaOkra extends ActionsSdkApp {
             Argument arg = request.getArgument("command");
             try {
                 mediaOkraService.publishMediaCommand(arg.getTextValue(), mediaOkraService.getUserCode());
+                responseBuilder.add("I have sent a media command to your device");
             } catch (Exception e) {
                 responseBuilder.add("There was an issue sending the command to your device, please try again later.");
             }
