@@ -83,9 +83,15 @@ public class MediaOkra extends ActionsSdkApp {
                 }
 
             } else if (said.equalsIgnoreCase("my code")) {
-                String myCode = mediaOkraService.getUserCode();
-                responseBuilder.add("Your Media Okra code is: " + myCode);
-            } else {
+                 String myCode = mediaOkraService.getUserCode();
+                 responseBuilder.add("Your Media Okra code is: " + myCode);
+                 responseBuilder.add("What would you like to do next?");
+             }
+             else if(said.equals("bye")) {
+                responseBuilder.add("Good bye!");
+                responseBuilder.endConversation();
+             }
+             else{
 
                 try {
                     mediaOkraService.publishMediaCommand(said, mediaOkraService.getUserCode());
