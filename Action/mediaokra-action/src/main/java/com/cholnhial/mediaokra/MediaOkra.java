@@ -50,7 +50,6 @@ public class MediaOkra extends ActionsSdkApp {
         ResourceBundle rb = ResourceBundle.getBundle("resources",
                 request.getLocale());
         responseBuilder.add(rb.getString("welcome"));
-
         LOGGER.info("Welcome intent end.");
         return responseBuilder.build();
     }
@@ -96,9 +95,11 @@ public class MediaOkra extends ActionsSdkApp {
                 try {
                     mediaOkraService.publishMediaCommand(said, mediaOkraService.getUserCode());
                     responseBuilder.add("I have sent a media command to your device");
+                    responseBuilder.endConversation();
                 }
                 catch (Exception e) {
                     responseBuilder.add("There was an issue sending the command to your device, please try again later.");
+                    responseBuilder.endConversation();
                 }
             }
         }
@@ -134,11 +135,14 @@ public class MediaOkra extends ActionsSdkApp {
             try {
                 mediaOkraService.publishMediaCommand(arg.getTextValue(), mediaOkraService.getUserCode());
                 responseBuilder.add("I have sent a media command to your device");
+                responseBuilder.endConversation();
             } catch (Exception e) {
                 responseBuilder.add("There was an issue sending the command to your device, please try again later.");
+                responseBuilder.endConversation();
             }
         } else {
             responseBuilder.add("I am unable to do anything without signing in. You can say \"sign-in\" to get an account");
+            responseBuilder.endConversation();
         }
 
 
